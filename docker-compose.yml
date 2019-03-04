@@ -11,6 +11,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - metabasenet
 
   metabase:
     depends_on:
@@ -27,6 +29,16 @@ services:
       MB_DB_USER: ${POSTGRES_USER}
       MB_DB_PASS: ${POSTGRES_PASSWORD}
       MB_DB_HOST: postgres
+      JAVA_OPTS:  ${JAVA_OPTS}
+    networks:
+      - metabasenet
+
+
+networks:
+
+  metabasenet:
+    external: true
+
 
   # pgadmin:
   #   depends_on:
