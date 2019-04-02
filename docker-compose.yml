@@ -5,7 +5,7 @@ services:
   postgres:
     image: postgres:10
     volumes:
-      - "/tmp/metabase/db_data:/var/lib/postgresql/data"
+      - "./db_data:/var/lib/postgresql/data"
     restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -33,20 +33,7 @@ services:
     networks:
       - metabasenet
 
-
 networks:
-
   metabasenet:
+    name: metabasenet
     external: true
-
-
-  # pgadmin:
-  #   depends_on:
-  #     - postgres
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - "3001:80"
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: mail@example.com
-  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
