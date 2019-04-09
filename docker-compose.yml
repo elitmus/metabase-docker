@@ -2,38 +2,54 @@ version: "3.5"
 
 services:
 
-  postgres:
-    image: postgres:10
-    volumes:
-      - "./db_data:/var/lib/postgresql/data"
+  mysql:
+    image: mysql:5.7
     restart: always
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    expose:
+      - '3306'
     networks:
       - metabasenet
 
   metabase:
     depends_on:
-      - postgres
+      - mysql
     image: metabase/metabase
-    ports:
-      - "3000:3000"
+    expose:
+      - '3000'
     restart: always
     environment:
-      MB_ENCRYPTION_SECRET_KEY: ${MB}
-      MB_DB_TYPE: postgres
-      MB_DB_DBNAME: ${POSTGRES_DB}
-      MB_DB_PORT: 5432
-      MB_DB_USER: ${POSTGRES_USER}
-      MB_DB_PASS: ${POSTGRES_PASSWORD}
-      MB_DB_HOST: postgres
+      MB_DB_TYPE: mysql
+      MB_DB_HOST: mysql
+      MB_DB_DBNAME: ${MYSQL_DATABASE}
+      MB_DB_PORT: 3306
+      MB_DB_USER: ${MYSQL_USER}
+      MB_DB_PASS: ${MYSQL_PASSWORD}
       JAVA_OPTS:  ${JAVA_OPTS}
     networks:
       - metabasenet
 
+  nginx:
+    depends_on:
+      - mysql
+      - metabase
+    image: nginx:latest
+    container_name: production_nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/error.log:/etc/nginx/error_log.log
+      - ./nginx/cache/:/etc/nginx/cache
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - metabasenet
+
+
 networks:
   metabasenet:
-    name: metabasenet
-    external: true
+    driver: bridge
