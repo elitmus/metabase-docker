@@ -2,3 +2,4 @@
 .DS_Store
 db_data/
 nginx/error.log
+db_backup
