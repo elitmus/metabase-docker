@@ -4,7 +4,7 @@ set -o allexport
 source .env
 set +o allexport
 domains=$DOMAINS
-certificate_decision=$NEED_CERTS
+certificate_decision=$REQUIRE_SSL_CERTS
 echo RAILS_ENV
 
 rsa_key_size=4096
