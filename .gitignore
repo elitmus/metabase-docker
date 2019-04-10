@@ -3,3 +3,5 @@
 db_data/
 nginx/error.log
 db_backup
+nginx/certbot
+nginx/cache
