@@ -10,10 +10,6 @@ data_path="./nginx/certbot"
 email=$email # Adding a valid address is strongly recommended
 staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
 
-echo "### Starting nginx ..."
-docker-compose up --force-recreate -d nginx
-echo
-
 echo "### Deleting dummy certificate for $domains ..."
 docker-compose run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/live/$domains && \
