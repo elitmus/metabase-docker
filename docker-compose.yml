@@ -52,7 +52,7 @@ services:
   certbot:
     depends_on:
       - nginx
-    image: certbot/certbot
+    image: certbot/dns-route53
     restart: unless-stopped
     networks:
       - metabasenet
