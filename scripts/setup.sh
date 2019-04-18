@@ -30,3 +30,14 @@ echo "### Creating nginx conf ..."
 nginx_path="$SCRIPTS_ROOT/../nginx"
 domain=$domains $SCRIPTS_ROOT/nginx.conf.sh > $SCRIPTS_ROOT/../nginx/nginx.conf
 echo
+
+echo "### Starting server"
+docker-compose up -d
+echo
+
+echo "### Deleting dummy certificate for $domains ..."
+docker-compose run --rm --entrypoint "\
+  rm -Rf /etc/letsencrypt/live/$domains && \
+  rm -Rf /etc/letsencrypt/archive/$domains && \
+  rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
+echo
